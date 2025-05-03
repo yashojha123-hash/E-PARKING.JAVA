@@ -1,0 +1,25 @@
+package models;
+
+public class Vehicle {
+    private String vehicleNumber;
+    private String type; // e.g., car, bike
+    private long entryTime;
+
+    public Vehicle(String vehicleNumber, String type) {
+        this.vehicleNumber = vehicleNumber;
+        this.type = type;
+        this.entryTime = System.currentTimeMillis();
+    }
+
+    public String getVehicleNumber() {
+        return vehicleNumber;
+    }
+
+    public long getEntryTime() {
+        return entryTime;
+    }
+
+    public String getType() {
+        return type;
+    }
+}

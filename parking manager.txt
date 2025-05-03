@@ -1,0 +1,48 @@
+package services;
+
+import models.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class ParkingManager {
+    private List<ParkingSlot> slots;
+
+    public ParkingManager(int totalSlots) {
+        slots = new ArrayList<>();
+        for (int i = 0; i < totalSlots; i++) {
+            slots.add(new ParkingSlot(i + 1));
+        }
+    }
+
+    public boolean parkVehicle(Vehicle v) {
+        for (ParkingSlot slot : slots) {
+            if (!slot.isOccupied()) {
+                slot.parkVehicle(v);
+                System.out.println("Vehicle parked in slot: " + slot.getSlotId());
+                return true;
+            }
+        }
+        System.out.println("No slots available.");
+        return false;
+    }
+
+    public void releaseVehicle(String vehicleNumber) {
+        for (ParkingSlot slot : slots) {
+            if (slot.isOccupied() && slot.currentVehicle.getVehicleNumber().equals(vehicleNumber)) {
+                Vehicle v = slot.releaseVehicle();
+                long duration = (System.currentTimeMillis() - v.getEntryTime()) / 1000; // seconds
+                double bill = duration * 0.5; // Simple billing logic
+                System.out.println("Vehicle " + v.getVehicleNumber() + " left. Bill: $" + bill);
+                return;
+            }
+        }
+        System.out.println("Vehicle not found.");
+    }
+
+    public void showAvailableSlots() {
+        for (ParkingSlot slot : slots) {
+            System.out.println("Slot " + slot.getSlotId() + ": " + (slot.isOccupied() ? "Occupied" : "Free"));
+        }
+    }
+}

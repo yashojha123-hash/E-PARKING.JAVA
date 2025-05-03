@@ -1,0 +1,36 @@
+package models;
+
+public class ParkingSlot {
+    private int slotId;
+    private boolean isOccupied;
+    private Vehicle currentVehicle;
+
+    public ParkingSlot(int slotId) {
+        this.slotId = slotId;
+        this.isOccupied = false;
+    }
+
+    public boolean parkVehicle(Vehicle v) {
+        if (!isOccupied) {
+            this.currentVehicle = v;
+            this.isOccupied = true;
+            return true;
+        }
+        return false;
+    }
+
+    public Vehicle releaseVehicle() {
+        this.isOccupied = false;
+        Vehicle temp = this.currentVehicle;
+        this.currentVehicle = null;
+        return temp;
+    }
+
+    public boolean isOccupied() {
+        return isOccupied;
+    }
+
+    public int getSlotId() {
+        return slotId;
+    }
+}

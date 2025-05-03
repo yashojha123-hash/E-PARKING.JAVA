@@ -1,0 +1,113 @@
+import java.util.*;
+
+// Vehicle class for storing vehicle details
+class Vehicle {
+    String number;
+    String type;
+    long entryTime;
+
+    Vehicle(String number, String type) {
+        this.number = number;
+        this.type = type;
+        this.entryTime = System.currentTimeMillis();
+    }
+}
+
+// Main class containing the main method
+public class EParkingSystem {
+    static Scanner scanner = new Scanner(System.in);
+    static ArrayList<Vehicle> parkedVehicles = new ArrayList<>();
+    static final int MAX_SLOTS = 10;
+
+    public static void main(String[] args) {
+        int choice;
+        do {
+            System.out.println("\n=== E-Parking System ===");
+            System.out.println("1. Park Vehicle");
+            System.out.println("2. Remove Vehicle");
+            System.out.println("3. View Parked Vehicles");
+            System.out.println("4. Exit");
+            System.out.print("Enter choice: ");
+            choice = scanner.nextInt();
+            scanner.nextLine(); // consume newline
+
+            switch (choice) {
+                case 1:
+                    parkVehicle();
+                    break;
+                case 2:
+                    removeVehicle();
+                    break;
+                case 3:
+                    viewVehicles();
+                    break;
+                case 4:
+                    System.out.println("Exiting system.");
+                    break;
+                default:
+                    System.out.println("Invalid choice.");
+            }
+        } while (choice != 4);
+    }
+
+    static void parkVehicle() {
+        if (parkedVehicles.size() >= MAX_SLOTS) {
+            System.out.println("Parking full!");
+            return;
+        }
+
+        System.out.print("Enter vehicle number: ");
+        String number = scanner.nextLine();
+        System.out.print("Enter vehicle type (Car/Bike): ");
+        String type = scanner.nextLine();
+
+        Vehicle v = new Vehicle(number, type);
+        parkedVehicles.add(v);
+        System.out.println("Vehicle parked successfully.");
+    }
+
+    static void removeVehicle() {
+        System.out.print("Enter vehicle number to remove: ");
+        String number = scanner.nextLine();
+        boolean found = false;
+
+        Iterator<Vehicle> iterator = parkedVehicles.iterator();
+        while (iterator.hasNext()) {
+            Vehicle v = iterator.next();
+            if (v.number.equalsIgnoreCase(number)) {
+                long currentTime = System.currentTimeMillis();
+                long durationMinutes = (currentTime - v.entryTime) / (1000 * 60);
+                long fee = calculateFee(durationMinutes, v.type);
+
+                System.out.println("Vehicle found and removed.");
+                System.out.println("Parked duration: " + durationMinutes + " minutes");
+                System.out.println("Total fee: ₹" + fee);
+                iterator.remove();
+                found = true;
+                break;
+            }
+        }
+
+        if (!found) {
+            System.out.println("Vehicle not found.");
+        }
+    }
+
+    static void viewVehicles() {
+        if (parkedVehicles.isEmpty()) {
+            System.out.println("No vehicles parked.");
+            return;
+        }
+
+        System.out.println("Parked Vehicles:");
+        for (Vehicle v : parkedVehicles) {
+            System.out.println("Number: " + v.number + " | Type: " + v.type);
+        }
+    }
+
+    static long calculateFee(long minutes, String type) {
+        long baseRate = type.equalsIgnoreCase("Car") ? 20 : 10;
+        long extra = ((minutes / 30) * 10); // ₹10 per 30 minutes
+        return baseRate + extra;
+    }
+}
