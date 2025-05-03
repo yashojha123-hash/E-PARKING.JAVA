@@ -1,6 +1,4 @@
 import java.util.*;
-
-// Vehicle class for storing vehicle details
 class Vehicle {
     String number;
     String type;
@@ -12,8 +10,6 @@ class Vehicle {
         this.entryTime = System.currentTimeMillis();
     }
 }
-
-// Main class containing the main method
 public class EParkingSystem {
     static Scanner scanner = new Scanner(System.in);
     static ArrayList<Vehicle> parkedVehicles = new ArrayList<>();
